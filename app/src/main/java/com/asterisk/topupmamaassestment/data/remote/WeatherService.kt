@@ -13,13 +13,15 @@ interface WeatherService {
 
     @GET("weather")
     suspend fun fetchWeatherForecast(
-        @Query("q") query: String
+        @Query("q") query: String,
+        @Query("appid") apiKey: String = API_KEY
     ): Response<ForecastResponse>
 
 
     companion object {
 
         private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+        private const val API_KEY = "d74edc7930e2dd36ef98bb9080aa1f11"
 
         fun create(): WeatherService {
             return composeRetrofitBuilder()
