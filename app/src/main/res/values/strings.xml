@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">TopUpMamaAssestment</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">City: %1$s</string>
+    <string name="country">Country: %1$s</string>
+    <string name="temp">Temp: %1$s&#x2103;</string>
+    <string name="retry">Retry</string>
 </resources>

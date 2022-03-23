@@ -14,6 +14,7 @@ interface WeatherService {
     @GET("weather")
     suspend fun fetchWeatherForecast(
         @Query("q") query: String,
+        @Query("units") units: String = "metric",
         @Query("appid") apiKey: String = API_KEY
     ): Response<ForecastResponse>
 
