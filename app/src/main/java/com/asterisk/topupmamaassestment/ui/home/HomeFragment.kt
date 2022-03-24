@@ -9,12 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.asterisk.topupmamaassestment.R
 import com.asterisk.topupmamaassestment.databinding.FragmentHomeBinding
-import com.asterisk.topupmamaassestment.utils.Cities
-import com.asterisk.topupmamaassestment.utils.Resource
 import com.asterisk.topupmamaassestment.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
+import java.sql.Time
 
 
 @AndroidEntryPoint
@@ -41,16 +40,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setupSearchEvent() {
         binding.btnRetry.setOnClickListener {
-            val inputValue = ""
-            if (inputValue.isEmpty()) {
-                Timber.d("missing user's input")
+            val userInput = "l"
+            if (userInput.isEmpty()) {
+                Timber.d("put in something")
             } else {
-                viewModel.searchQuery = true
-                viewModel.getSearch(inputValue)
-                setupSearchForecastObserver()
+                viewModel.getSearchQuery(userInput)
+                viewModel.searching = true
             }
         }
     }
+
+//    private fun setupSearchForecastObserver() {
+//        viewModel.searchedForecast.observe(viewLifecycleOwner) { result ->
+//            homeAdapter.submitList(result.data)
+//        }
+//    }
 
     private fun setUpRecyclerView() {
         homeAdapter = HomeAdapter()
@@ -63,33 +67,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupForecastObserver() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.forecast.collect {
-                val result = it ?: return@collect
-                binding.apply {
-                    progressBar.isVisible = result.status == Status.LOADING
-                    rvForecast.isVisible = !result.data.isNullOrEmpty()
-                    homeAdapter.submitList(result.data)
-                }
-            }
-        }
-    }
-
-    private fun setupSearchForecastObserver() {
-        if (viewModel.searchQuery) {
-            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                viewModel.searchForecast.collect {
-                    val result = it ?: return@collect
-                    binding.apply {
-                        progressBar.isVisible = result.status == Status.LOADING
-                        rvForecast.isVisible = !result.data.isNullOrEmpty()
-                        homeAdapter.submitList(result.data)
+        if (viewModel.searching) {
+//            setupSearchForecastObserver()
+            viewModel.searching = false
+        } else {
+            viewModel.forecast.observe(viewLifecycleOwner) { result ->
+                Timber.d("this is the result ${result.data}")
+                when (result.status) {
+                    Status.SUCCESS -> {
+                        binding.progressBar.visibility = View.GONE
+                        result.data?.let {
+                            binding.rvForecast.isVisible = true
+                            homeAdapter.submitList(result.data)
+                        }
+                    }
+                    Status.ERROR -> {
+                        binding.progressBar.visibility = View.GONE
+                    }
+                    Status.LOADING -> {
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                 }
             }
         }
-    }
 
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

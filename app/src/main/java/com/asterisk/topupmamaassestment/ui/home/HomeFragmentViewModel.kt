@@ -1,10 +1,9 @@
 package com.asterisk.topupmamaassestment.ui.home
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.asterisk.topupmamaassestment.data.models.ForecastResponse
 import com.asterisk.topupmamaassestment.data.repository.ForecastRepository
+import com.asterisk.topupmamaassestment.utils.AppUtils
 import com.asterisk.topupmamaassestment.utils.Cities
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,46 +20,20 @@ class HomeFragmentViewModel @Inject constructor(
     private val forecastRepository: ForecastRepository
 ) : ViewModel() {
 
-    private val eventChannel = Channel<ForecastEvent>()
-    val forecastEvents = eventChannel.receiveAsFlow()
-
-    private val refreshTriggerChannel = Channel<Refresh>()
-    private val refreshTrigger = refreshTriggerChannel.receiveAsFlow()
-
     init {
         getTwentyCities()
     }
 
-    private val query = MutableStateFlow("")
-    var searchQuery = false
+    var searching: Boolean = false
 
+    private val _query = MutableLiveData<String>()
+    private val _searchQuery = MutableLiveData<String>()
 
-    val forecast = query.flatMapLatest { string ->
-        forecastRepository.getForecast(
-            string = string,
-            onFetchFailed = { throwable ->
-                viewModelScope.launch {
-                    eventChannel.send(ForecastEvent.ShowErrorMessage(throwable))
-                }
-            },
-            forceRefresh = false
-        )
-    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+    private val _forecast = _query.switchMap { string ->
+        forecastRepository.getForecast(string)
+    }
 
-    val searchForecast = query.flatMapLatest { string ->
-        forecastRepository.searchForecast(
-            string = string,
-            onFetchFailed = { throwable ->
-                viewModelScope.launch {
-                    eventChannel.send(ForecastEvent.ShowErrorMessage(throwable))
-                }
-            },
-            forceRefresh = false
-        )
-    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
-
-
-
+    val forecast = _forecast
 
     private fun getTwentyCities() = CoroutineScope(Dispatchers.IO).launch {
         for (city in Cities.listOfCities) {
@@ -69,20 +43,12 @@ class HomeFragmentViewModel @Inject constructor(
     }
 
     private fun getQueryString(string: String) = viewModelScope.launch {
-        query.value = string
+        _query.value = string
     }
 
-    fun getSearch(string: String) = viewModelScope.launch {
-        query.value = string
+    fun getSearchQuery(string: String) = viewModelScope.launch {
+        _searchQuery.value = string
     }
 
-
-    enum class Refresh {
-        FORCE, NORMAL
-    }
-
-    sealed class ForecastEvent {
-        data class ShowErrorMessage(val error: Throwable) : ForecastEvent()
-    }
 
 }

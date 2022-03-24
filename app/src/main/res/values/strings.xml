@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">TopUpMamaAssestment</string>
-    <string name="name">City: %1$s</string>
+    <string name="city">City: %1$s</string>
     <string name="country">Country: %1$s</string>
     <string name="temp">Temp: %1$s&#x2103;</string>
     <string name="retry">Retry</string>

@@ -17,7 +17,7 @@ class ForecastViewHolder(private val binding: ForecastListItemBinding) :
         val iconUrl = "http://openweathermap.org/img/w/$icon.png"
 
         binding.apply {
-            tvName.text = context.getString(R.string.name, forecastResponse.name)
+            tvName.text = context.getString(R.string.city, forecastResponse.name)
             tvCountry.text = context.getString(R.string.country, forecastResponse.sys.country)
             temp.text =
                 context.getString(R.string.temp, forecastResponse.main.temp.toString())

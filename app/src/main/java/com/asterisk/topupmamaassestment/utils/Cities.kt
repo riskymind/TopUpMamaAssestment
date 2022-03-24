@@ -21,8 +21,8 @@ object Cities {
         "dubai",
         "jakarta",
         "toronto",
-        "london",
-        "sydney"
+        "sydney",
+        "london"
     )
 
 }
