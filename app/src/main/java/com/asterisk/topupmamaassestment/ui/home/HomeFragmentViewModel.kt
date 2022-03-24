@@ -17,38 +17,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeFragmentViewModel @Inject constructor(
-    private val forecastRepository: ForecastRepository
+    private val forecastRepository: ForecastRepository,
+    private val appUtils: AppUtils
 ) : ViewModel() {
 
+    private val forecastFlow = MutableStateFlow<List<ForecastResponse>>(emptyList())
+    val forecast: Flow<List<ForecastResponse>> = forecastFlow
+
     init {
-        getTwentyCities()
-    }
-
-    var searching: Boolean = false
-
-    private val _query = MutableLiveData<String>()
-    private val _searchQuery = MutableLiveData<String>()
-
-    private val _forecast = _query.switchMap { string ->
-        forecastRepository.getForecast(string)
-    }
-
-    val forecast = _forecast
-
-    private fun getTwentyCities() = CoroutineScope(Dispatchers.IO).launch {
-        for (city in Cities.listOfCities) {
-            val result = async { getQueryString(city) }
-            result.await()
+        viewModelScope.launch(Dispatchers.IO) {
+            if (appUtils.isConnected()) {
+                val cities = Cities.listOfCities
+                val forecastList = forecastRepository.getForecast(cities)
+                forecastFlow.value = forecastList
+            }else {
+//                val cities = Cities.listOfCities
+                val forecastList = forecastRepository.getLocalForecast()
+                forecastFlow.value = forecastList
+            }
         }
     }
-
-    private fun getQueryString(string: String) = viewModelScope.launch {
-        _query.value = string
-    }
-
-    fun getSearchQuery(string: String) = viewModelScope.launch {
-        _searchQuery.value = string
-    }
-
 
 }

@@ -40,13 +40,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setupSearchEvent() {
         binding.btnRetry.setOnClickListener {
-            val userInput = "l"
-            if (userInput.isEmpty()) {
-                Timber.d("put in something")
-            } else {
-                viewModel.getSearchQuery(userInput)
-                viewModel.searching = true
-            }
+//            val userInput = "l"
+//            if (userInput.isEmpty()) {
+//                Timber.d("put in something")
+//            } else {
+//                viewModel.getSearchQuery(userInput)
+//                viewModel.searching = true
+//            }
         }
     }
 
@@ -67,29 +67,40 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupForecastObserver() {
-        if (viewModel.searching) {
-//            setupSearchForecastObserver()
-            viewModel.searching = false
-        } else {
-            viewModel.forecast.observe(viewLifecycleOwner) { result ->
-                Timber.d("this is the result ${result.data}")
-                when (result.status) {
-                    Status.SUCCESS -> {
-                        binding.progressBar.visibility = View.GONE
-                        result.data?.let {
-                            binding.rvForecast.isVisible = true
-                            homeAdapter.submitList(result.data)
-                        }
-                    }
-                    Status.ERROR -> {
-                        binding.progressBar.visibility = View.GONE
-                    }
-                    Status.LOADING -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.forecast.collect { forecast ->
+                binding.apply {
+                    progressBar.isVisible = forecast.isEmpty()
+                    btnRetry.isVisible = forecast.isEmpty()
                 }
+                homeAdapter.submitList(forecast)
+
             }
         }
+//        if (viewModel.searching) {
+////            setupSearchForecastObserver()
+//            viewModel.searching = false
+//        } else {
+//            viewModel.forecast.observe(viewLifecycleOwner) { result ->
+//                Timber.d("this is the result ${result.data}")
+//                when (result.status) {
+//                    Status.SUCCESS -> {
+//                        binding.progressBar.visibility = View.GONE
+//                        result.data?.let {
+//                            binding.rvForecast.isVisible = true
+//                            homeAdapter.submitList(result.data)
+//                        }
+//                    }
+//                    Status.ERROR -> {
+//                        binding.progressBar.visibility = View.GONE
+//                    }
+//                    Status.LOADING -> {
+//                        binding.progressBar.visibility = View.VISIBLE
+//                    }
+//                }
+//            }
+//        }
 
 
     }

@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.Flow
 interface ForecastDao {
 
     @Query("SELECT * FROM weather_table")
-    fun getForecast(): LiveData<List<ForecastResponse>>
+    fun getForecast(): List<ForecastResponse>
 
     @Query("SELECT * FROM weather_table WHERE name LIKE '%' || :string || '%'")
     fun searchForecast(string: String): LiveData<List<ForecastResponse>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(forecastResponse: ForecastResponse)
+    suspend fun insert(forecastResponse: List<ForecastResponse>)
 
     @Query("DELETE FROM weather_table")
     suspend fun delete()

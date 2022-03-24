@@ -16,7 +16,7 @@ interface WeatherService {
         @Query("q") query: String,
         @Query("units") units: String = "metric",
         @Query("appid") apiKey: String = API_KEY
-    ): Response<ForecastResponse>
+    ): ForecastResponse
 
 
     companion object {

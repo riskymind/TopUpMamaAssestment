@@ -7,5 +7,6 @@ class WeatherDataSource @Inject constructor(
 ) : BaseDataSource() {
 
     suspend fun getForecast(string: String) =
-        getResult { weatherService.fetchWeatherForecast(string) }
+        weatherService.fetchWeatherForecast(string)
+//        getResult { weatherService.fetchWeatherForecast(string) }
 }
