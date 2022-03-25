@@ -1,17 +1,9 @@
 package com.asterisk.topupmamaassestment.data.repository
 
 import com.asterisk.topupmamaassestment.data.local.ForecastDao
-import com.asterisk.topupmamaassestment.data.models.ForecastResponse
+import com.asterisk.topupmamaassestment.data.models.local.ForecastResponse
 import com.asterisk.topupmamaassestment.data.remote.WeatherDataSource
-import com.asterisk.topupmamaassestment.utils.AppUtils
-import com.asterisk.topupmamaassestment.utils.Cities
-import com.asterisk.topupmamaassestment.utils.Resource
-import com.asterisk.topupmamaassestment.utils.performGetOperation
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import okhttp3.Dispatcher
-import timber.log.Timber
 import javax.inject.Inject
 
 class ForecastRepository @Inject constructor(
@@ -20,10 +12,10 @@ class ForecastRepository @Inject constructor(
 ) {
 
     suspend fun getForecast(cities: List<String>): List<ForecastResponse> {
-        val list = ArrayList<ForecastResponse>()
+        val list = ArrayList<com.asterisk.topupmamaassestment.data.models.remote.ForecastResponse>()
         var uiForecast = listOf<ForecastResponse>()
         CoroutineScope(Dispatchers.IO).launch {
-            var response: Deferred<ForecastResponse>
+            var response: Deferred<com.asterisk.topupmamaassestment.data.models.remote.ForecastResponse>
             for (city in cities) {
                 response = async { remoteDataSource.getForecast(city) }
                 list.addAll(listOf(response.await()))
@@ -53,5 +45,7 @@ class ForecastRepository @Inject constructor(
     }
 
     fun getLocalForecast() = localDataSource.getForecast()
+
+    fun searchForecast(string: String) = localDataSource.searchForecast(string)
 
 }

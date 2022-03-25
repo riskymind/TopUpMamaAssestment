@@ -1,9 +1,8 @@
 package com.asterisk.topupmamaassestment.data.remote
 
-import com.asterisk.topupmamaassestment.data.models.ForecastResponse
+import com.asterisk.topupmamaassestment.data.models.remote.ForecastResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

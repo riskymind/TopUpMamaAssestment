@@ -1,11 +1,10 @@
-package com.asterisk.topupmamaassestment.data.models
+package com.asterisk.topupmamaassestment.data.models.remote
 
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "weather_table")
 data class ForecastResponse(
     @SerializedName("base")
     val base: String,

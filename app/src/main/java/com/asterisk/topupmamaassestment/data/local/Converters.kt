@@ -1,7 +1,8 @@
 package com.asterisk.topupmamaassestment.data.local
 
 import androidx.room.TypeConverter
-import com.asterisk.topupmamaassestment.data.models.*
+import com.asterisk.topupmamaassestment.data.models.local.*
+import com.asterisk.topupmamaassestment.data.models.remote.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

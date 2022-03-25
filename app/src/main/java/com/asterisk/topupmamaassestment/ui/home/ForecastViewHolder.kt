@@ -3,7 +3,7 @@ package com.asterisk.topupmamaassestment.ui.home
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.asterisk.topupmamaassestment.R
-import com.asterisk.topupmamaassestment.data.models.ForecastResponse
+import com.asterisk.topupmamaassestment.data.models.local.ForecastResponse
 import com.asterisk.topupmamaassestment.databinding.ForecastListItemBinding
 import com.bumptech.glide.Glide
 

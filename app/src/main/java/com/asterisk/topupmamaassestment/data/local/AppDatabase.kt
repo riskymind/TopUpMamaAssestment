@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.asterisk.topupmamaassestment.data.models.ForecastResponse
+import com.asterisk.topupmamaassestment.data.models.local.ForecastResponse
 
 @Database(entities = [ForecastResponse::class], version = 1)
 @TypeConverters(Converters::class)

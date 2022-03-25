@@ -1,4 +1,4 @@
-package com.asterisk.topupmamaassestment.data.models
+package com.asterisk.topupmamaassestment.data.models.remote
 
 
 import com.google.gson.annotations.SerializedName

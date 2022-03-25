@@ -1,7 +1,10 @@
 package com.asterisk.topupmamaassestment.ui.home
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -9,11 +12,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.asterisk.topupmamaassestment.R
 import com.asterisk.topupmamaassestment.databinding.FragmentHomeBinding
-import com.asterisk.topupmamaassestment.utils.Status
+import com.asterisk.topupmamaassestment.utils.onQueryTextChanger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import timber.log.Timber
-import java.sql.Time
 
 
 @AndroidEntryPoint
@@ -30,6 +31,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
 
+        setHasOptionsMenu(true)
+
         setUpRecyclerView()
 
         setupForecastObserver()
@@ -40,21 +43,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setupSearchEvent() {
         binding.btnRetry.setOnClickListener {
-//            val userInput = "l"
-//            if (userInput.isEmpty()) {
-//                Timber.d("put in something")
-//            } else {
-//                viewModel.getSearchQuery(userInput)
-//                viewModel.searching = true
-//            }
         }
     }
 
-//    private fun setupSearchForecastObserver() {
-//        viewModel.searchedForecast.observe(viewLifecycleOwner) { result ->
-//            homeAdapter.submitList(result.data)
-//        }
-//    }
 
     private fun setUpRecyclerView() {
         homeAdapter = HomeAdapter()
@@ -67,7 +58,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupForecastObserver() {
-
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.forecast.collect { forecast ->
                 binding.apply {
@@ -78,31 +68,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             }
         }
-//        if (viewModel.searching) {
-////            setupSearchForecastObserver()
-//            viewModel.searching = false
-//        } else {
-//            viewModel.forecast.observe(viewLifecycleOwner) { result ->
-//                Timber.d("this is the result ${result.data}")
-//                when (result.status) {
-//                    Status.SUCCESS -> {
-//                        binding.progressBar.visibility = View.GONE
-//                        result.data?.let {
-//                            binding.rvForecast.isVisible = true
-//                            homeAdapter.submitList(result.data)
-//                        }
-//                    }
-//                    Status.ERROR -> {
-//                        binding.progressBar.visibility = View.GONE
-//                    }
-//                    Status.LOADING -> {
-//                        binding.progressBar.visibility = View.VISIBLE
-//                    }
-//                }
-//            }
-//        }
 
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.searchFlow.collect {
+                homeAdapter.submitList(it)
+            }
+        }
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.forecast_menu, menu)
+
+        val searchItem = menu.findItem(R.id.actionSearch)
+        val searchView = searchItem.actionView as SearchView
+        searchView.onQueryTextChanger {
+            viewModel.searchQuery.value = it
+        }
     }
 
     override fun onDestroyView() {

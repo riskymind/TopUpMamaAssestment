@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.asterisk.topupmamaassestment.data.models.ForecastResponse
+import com.asterisk.topupmamaassestment.data.models.local.ForecastResponse
 import com.asterisk.topupmamaassestment.databinding.ForecastListItemBinding
 
 class HomeAdapter : ListAdapter<ForecastResponse, ForecastViewHolder>(ForecastComparator()) {
