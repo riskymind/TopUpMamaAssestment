@@ -4,6 +4,7 @@ import com.asterisk.topupmamaassestment.data.local.ForecastDao
 import com.asterisk.topupmamaassestment.data.models.local.ForecastResponse
 import com.asterisk.topupmamaassestment.data.remote.WeatherDataSource
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class ForecastRepository @Inject constructor(
@@ -21,21 +22,30 @@ class ForecastRepository @Inject constructor(
                 list.addAll(listOf(response.await()))
             }
 
-            uiForecast = list.map {
+            val favForecast = localDataSource.getFavForecast().first()
+
+
+            uiForecast = list.map { serverResponse ->
+                val isFav = favForecast.any {
+                    it.name == serverResponse.name
+                }
+
+
                 ForecastResponse(
-                    base = it.base,
-                    clouds = it.clouds,
-                    cod = it.cod,
-                    coord = it.coord,
-                    dt = it.dt,
-                    id = it.id,
-                    main = it.main,
-                    name = it.name,
-                    sys = it.sys,
-                    timezone = it.timezone,
-                    visibility = it.visibility,
-                    weather = it.weather,
-                    wind = it.wind
+                    base = serverResponse.base,
+                    clouds = serverResponse.clouds,
+                    cod = serverResponse.cod,
+                    coord = serverResponse.coord,
+                    dt = serverResponse.dt,
+                    id = serverResponse.id,
+                    main = serverResponse.main,
+                    name = serverResponse.name,
+                    sys = serverResponse.sys,
+                    timezone = serverResponse.timezone,
+                    visibility = serverResponse.visibility,
+                    weather = serverResponse.weather,
+                    wind = serverResponse.wind,
+                    isFavourite = isFav
                 )
             }
             localDataSource.insert(uiForecast)
@@ -47,5 +57,7 @@ class ForecastRepository @Inject constructor(
     fun getLocalForecast() = localDataSource.getForecast()
 
     fun searchForecast(string: String) = localDataSource.searchForecast(string)
+
+    suspend fun update(updateForecast: ForecastResponse) = localDataSource.update(updateForecast)
 
 }

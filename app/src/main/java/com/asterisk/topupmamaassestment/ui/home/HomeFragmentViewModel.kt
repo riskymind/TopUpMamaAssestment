@@ -8,9 +8,11 @@ import com.asterisk.topupmamaassestment.utils.AppUtils
 import com.asterisk.topupmamaassestment.utils.Cities
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +21,9 @@ class HomeFragmentViewModel @Inject constructor(
     private val forecastRepository: ForecastRepository,
     private val appUtils: AppUtils
 ) : ViewModel() {
+
+    private val forecastEventChannel = Channel<ForecastEvent>()
+    val homeEvent = forecastEventChannel.receiveAsFlow()
 
     val searchQuery = MutableStateFlow("")
 
@@ -36,7 +41,6 @@ class HomeFragmentViewModel @Inject constructor(
                 val forecastList = forecastRepository.getForecast(cities)
                 forecastFlow.value = forecastList
             } else {
-//                val cities = Cities.listOfCities
                 val forecastList = forecastRepository.getLocalForecast()
                 forecastFlow.value = forecastList
             }
@@ -48,5 +52,23 @@ class HomeFragmentViewModel @Inject constructor(
     }
 
     val searchFlow = searchForecastFlow
+
+    fun onFavClick(forecast: ForecastResponse) {
+        val favStatus = forecast.isFavourite
+        val updateForecast = forecast.copy(isFavourite = !favStatus)
+        viewModelScope.launch {
+            forecastRepository.update(updateForecast)
+        }
+    }
+
+    fun onItemClicked(forecastResponse: ForecastResponse) = viewModelScope.launch {
+        forecastEventChannel.send(ForecastEvent.NavigateToDetailScreen(forecastResponse))
+    }
+
+
+    sealed class ForecastEvent {
+        data class NavigateToDetailScreen(val forecastResponse: ForecastResponse) : ForecastEvent()
+    }
+
 
 }
