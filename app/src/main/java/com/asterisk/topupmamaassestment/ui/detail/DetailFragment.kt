@@ -37,10 +37,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             tvDate.text = forecast.dt.toString()
             tvTemp.text = forecast.main.temp.toString()
             tvDescription.text = forecast.weather[0].description
-            tvFeelsLike.text = forecast.main.feelsLike.toString()
-            tvPressure.text = forecast.main.pressure.toString()
-            tvHumidity.text = forecast.main.humidity.toString()
-            tvWind.text = forecast.wind.speed.toString()
+            tvFeelsLike.text = getString(R.string.feels_like, forecast.main.feelsLike.toString())
+            tvPressure.text = getString(R.string.pressure, forecast.main.pressure.toString())
+            tvHumidity.text = getString(R.string.humility, forecast.main.humidity.toString())
+            tvWind.text = getString(R.string.wind, forecast.wind.speed.toString())
 
             val icon: String = forecast.weather[0].icon
             val iconUrl = "http://openweathermap.org/img/w/$icon.png"

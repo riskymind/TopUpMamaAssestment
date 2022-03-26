@@ -14,4 +14,8 @@
     <string name="favorite_icon">favorite icon</string>
     <string name="detail_text">Detail</string>
     <string name="home_title">Home</string>
+    <string name="feels_like">%1$s&#x2103;</string>
+    <string name="pressure">%1$s hPa</string>
+    <string name="humility">%1$s%%</string>
+    <string name="wind">%1$sm/s</string>
 </resources>
