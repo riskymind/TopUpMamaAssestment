@@ -57,7 +57,7 @@
         android:id="@+id/tvCountry"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/secondaryLightColor"
+        android:textColor="#37474F"
         android:textSize="@dimen/_11ssp"
         app:layout_constraintEnd_toEndOf="@+id/tvName"
         app:layout_constraintStart_toStartOf="@+id/tvName"
@@ -83,12 +83,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_10sdp"
+        android:contentDescription="@string/favorite_icon"
         android:padding="12dp"
         android:src="@drawable/ic_ios_heart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCountry"
-        app:layout_constraintVertical_bias="0.6" />
+        app:layout_constraintVertical_bias="0.6"
+        tools:ignore="ImageContrastCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

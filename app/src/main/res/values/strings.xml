@@ -5,4 +5,13 @@
     <string name="temp">Temp: %1$s&#x2103;</string>
     <string name="retry">Retry</string>
     <string name="search">Search</string>
+    <string name="detail_icon">detail icon</string>
+    <string name="feels_like_label">Feels like</string>
+    <string name="pressure_label">Pressure</string>
+    <string name="humidity_label">Humidity</string>
+    <string name="wind_label">Wind</string>
+    <string name="weather_details_label">Weather details</string>
+    <string name="favorite_icon">favorite icon</string>
+    <string name="detail_text">Detail</string>
+    <string name="home_title">Home</string>
 </resources>

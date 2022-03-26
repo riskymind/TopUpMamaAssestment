@@ -27,25 +27,21 @@ class HomeFragmentViewModel @Inject constructor(
 
     val searchQuery = MutableStateFlow("")
 
-    private val forecastFlow =
-        MutableStateFlow<List<ForecastResponse>>(
-            emptyList()
-        )
-    val forecast: Flow<List<ForecastResponse>> =
-        forecastFlow
-
     init {
+        getCitiesTemperature()
+    }
+
+    private fun getCitiesTemperature() {
         viewModelScope.launch(Dispatchers.IO) {
             if (appUtils.isConnected()) {
                 val cities = Cities.listOfCities
-                val forecastList = forecastRepository.getForecast(cities)
-                forecastFlow.value = forecastList
+                forecastRepository.getForecast(cities)
             } else {
-                val forecastList = forecastRepository.getLocalForecast()
-                forecastFlow.value = forecastList
+                forecastEventChannel.send(ForecastEvent.ShowHomeError("You are offline"))
             }
         }
     }
+
 
     private val searchForecastFlow = searchQuery.flatMapLatest {
         forecastRepository.searchForecast(it)
@@ -68,6 +64,7 @@ class HomeFragmentViewModel @Inject constructor(
 
     sealed class ForecastEvent {
         data class NavigateToDetailScreen(val forecastResponse: ForecastResponse) : ForecastEvent()
+        data class ShowHomeError(val msg: String) : ForecastEvent()
     }
 
 

@@ -15,6 +15,7 @@ import com.asterisk.topupmamaassestment.R
 import com.asterisk.topupmamaassestment.data.models.local.ForecastResponse
 import com.asterisk.topupmamaassestment.databinding.FragmentHomeBinding
 import com.asterisk.topupmamaassestment.utils.onQueryTextChanger
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -66,10 +67,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupForecastObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.searchFlow.collect {
-                binding.apply {
-                    progressBar.isVisible = it.isEmpty()
-                    btnRetry.isVisible = it.isEmpty()
-                }
                 homeAdapter.submitList(it)
             }
         }
@@ -80,8 +77,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewModel.homeEvent.collect { event ->
                 when (event) {
                     is HomeFragmentViewModel.ForecastEvent.NavigateToDetailScreen -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment()
+                        val action =
+                            HomeFragmentDirections.actionHomeFragmentToDetailFragment(event.forecastResponse)
                         findNavController().navigate(action)
+                    }
+                    is HomeFragmentViewModel.ForecastEvent.ShowHomeError -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG)
+                            .show()
                     }
                 }
             }
