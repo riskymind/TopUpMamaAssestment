@@ -1,6 +1,9 @@
 package com.asterisk.topupmamaassestment.data.remote
 
 import com.asterisk.topupmamaassestment.data.models.remote.ForecastResponse
+import com.asterisk.topupmamaassestment.utils.Constants.API_KEY
+import com.asterisk.topupmamaassestment.utils.Constants.BASE_URL
+import com.asterisk.topupmamaassestment.utils.Constants.UNITS
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -13,15 +16,12 @@ interface WeatherService {
     @GET("weather")
     suspend fun fetchWeatherForecast(
         @Query("q") query: String,
-        @Query("units") units: String = "metric",
+        @Query("units") units: String = UNITS,
         @Query("appid") apiKey: String = API_KEY
     ): ForecastResponse
 
 
     companion object {
-
-        private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
-        private const val API_KEY = "d74edc7930e2dd36ef98bb9080aa1f11"
 
         fun create(): WeatherService {
             return composeRetrofitBuilder()

@@ -21,15 +21,11 @@ class ForecastRepository @Inject constructor(
                 response = async { remoteDataSource.getForecast(city) }
                 list.addAll(listOf(response.await()))
             }
-
             val favForecast = localDataSource.getFavForecast().first()
-
-
             uiForecast = list.map { serverResponse ->
                 val isFav = favForecast.any {
                     it.name == serverResponse.name
                 }
-
 
                 ForecastResponse(
                     base = serverResponse.base,
