@@ -7,14 +7,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.asterisk.topupmamaassestment.data.models.local.ForecastResponse
 
-@Database(entities = [ForecastResponse::class], version = 1)
+@Database(entities = [ForecastResponse::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun foreCastDao(): ForecastDao
 
     companion object {
-        private const val DATABASE_NAME = "posts-db"
+        const val DATABASE_NAME = "forecast-db"
 
         @Volatile
         private var instance: AppDatabase? = null

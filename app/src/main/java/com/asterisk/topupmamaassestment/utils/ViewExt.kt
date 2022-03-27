@@ -2,7 +2,7 @@ package com.asterisk.topupmamaassestment.utils
 
 import androidx.appcompat.widget.SearchView
 
-inline fun SearchView.onQueryTextChanger(crossinline listener: (String) -> Unit) {
+fun SearchView.onQueryTextChanger(listener: (String) -> Unit) {
     this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             return true
