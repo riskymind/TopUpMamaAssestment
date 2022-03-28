@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryColor"
+    android:background="@color/secondaryDarkColor"
     tools:context=".ui.detail.DetailFragment">
 
     <TextView
@@ -124,15 +124,7 @@
         app:layout_constraintStart_toStartOf="@id/ivDetails"
         app:layout_constraintTop_toBottomOf="@id/ivDetails" />
 
-    <View
-        android:id="@+id/row1"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:background="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/tvWeatherDetailLabel"
-        app:layout_constraintTop_toTopOf="@id/detailView" />
+
 
     <TextView
         android:id="@+id/tvFeelsLikeLabel"

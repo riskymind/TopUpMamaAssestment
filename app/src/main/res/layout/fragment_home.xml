@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/_5sdp"
+    android:background="@color/secondaryDarkColor"
     tools:context=".ui.home.HomeFragment">
 
 
@@ -12,6 +13,7 @@
         android:id="@+id/rvForecast"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        tools:listitem="@layout/forecast_list_item"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

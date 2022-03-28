@@ -8,6 +8,8 @@ import com.asterisk.topupmamaassestment.data.models.remote.*
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Entity(tableName = "weather_table")
 data class ForecastResponse(
@@ -42,5 +44,5 @@ data class ForecastResponse(
     val isFavourite: Boolean = false
 ) : Serializable {
     val getFormattedDT: String
-        get() = DateFormat.getDateInstance().format(dt)
+        get() = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH).format(Date(dt * 1000L))
 }
