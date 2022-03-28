@@ -34,7 +34,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         binding.apply {
             tvCityName.text = forecast.name
             tvCountryName.text = forecast.sys.country
-            tvDate.text = forecast.dt.toString()
+            tvDate.text = forecast.getFormattedDT
             tvTemp.text = forecast.main.temp.toString()
             tvDescription.text = forecast.weather[0].description
             tvFeelsLike.text = getString(R.string.feels_like, forecast.main.feelsLike.toString())

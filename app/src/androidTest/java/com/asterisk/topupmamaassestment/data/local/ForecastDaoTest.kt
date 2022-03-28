@@ -6,28 +6,38 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.asterisk.topupmamaassestment.data.models.local.ForecastResponse
 import com.asterisk.topupmamaassestment.data.models.remote.*
+import com.asterisk.topupmamaassestment.launchFragmentInHiltContainer
+import com.asterisk.topupmamaassestment.ui.home.HomeFragment
 import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
+import javax.inject.Named
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
 @SmallTest
+@HiltAndroidTest
 class ForecastDaoTest {
 
-    private lateinit var database: AppDatabase
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    @Named("testDB")
+    lateinit var database: AppDatabase
     private lateinit var forecastDao: ForecastDao
 
     @Before
     fun createDB() {
-        database = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            AppDatabase::class.java
-        ).allowMainThreadQueries().build()
+        hiltRule.inject()
         forecastDao = database.foreCastDao()
     }
 
@@ -36,6 +46,10 @@ class ForecastDaoTest {
         database.close()
     }
 
+//    @Test
+//    fun testLaunchFragmentHiltContainer() {
+//        launchFragmentInHiltContainer<HomeFragment> { }
+//    }
 
     @Test
     fun getListOfForecast_returnTrueIfEmpty() = runTest {

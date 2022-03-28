@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 import com.asterisk.topupmamaassestment.data.models.remote.*
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
+import java.text.DateFormat
 
 @Entity(tableName = "weather_table")
 data class ForecastResponse(
@@ -39,4 +40,7 @@ data class ForecastResponse(
     val wind: Wind,
     @ColumnInfo(name = "isFavourite")
     val isFavourite: Boolean = false
-) : Serializable
+) : Serializable {
+    val getFormattedDT: String
+        get() = DateFormat.getDateInstance().format(dt)
+}

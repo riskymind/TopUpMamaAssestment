@@ -1,7 +1,9 @@
 package com.asterisk.topupmamaassestment.data.remote
 
+import com.asterisk.topupmamaassestment.data.models.remote.ForecastResponse
 import com.asterisk.topupmamaassestment.utils.Resource
 import retrofit2.Response
+import javax.inject.Inject
 
 abstract class BaseDataSource {
 
@@ -21,4 +23,5 @@ abstract class BaseDataSource {
     private fun <T> error(message: String): Resource<T> {
         return Resource.error("Network failed with message $message")
     }
+
 }
