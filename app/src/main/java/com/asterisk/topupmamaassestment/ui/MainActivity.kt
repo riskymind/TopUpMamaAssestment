@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     @Inject
     lateinit var localRemoteSource: ForecastDao
-    private var viewBackgroundCheck = true
+//    private var viewBackgroundCheck = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +46,14 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
         setupActionBarWithNavController(navController)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val forecast = localRemoteSource.getFavForecast().first()
-            val intent = Intent(this@MainActivity, ForecastService::class.java)
-            intent.putExtra("forecast", forecast.toString())
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent)
-            }
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val forecast = localRemoteSource.getFavForecast().first()
+//            val intent = Intent(this@MainActivity, ForecastService::class.java)
+//            intent.putExtra("forecast", forecast.toString())
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                startForegroundService(intent)
+//            }
+//        }
 
 
     }

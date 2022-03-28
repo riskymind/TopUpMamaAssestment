@@ -42,13 +42,14 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
-
+    //data flow
     private val searchForecastFlow = searchQuery.flatMapLatest {
         forecastRepository.searchForecast(it)
     }
 
     val searchFlow = searchForecastFlow
 
+    // favourite click event
     fun onFavClick(forecast: ForecastResponse) {
         val favStatus = forecast.isFavourite
         val updateForecast = forecast.copy(isFavourite = !favStatus)
@@ -57,6 +58,7 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
+    // navigation event
     fun onItemClicked(forecastResponse: ForecastResponse) = viewModelScope.launch {
         forecastEventChannel.send(ForecastEvent.NavigateToDetailScreen(forecastResponse))
     }
